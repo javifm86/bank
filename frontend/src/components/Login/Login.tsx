@@ -1,13 +1,29 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import postLogin from '../../api/login';
+import Spinner from '../Spinner/Spinner';
 
-function Login() {
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+interface Props {
+  onLogin: (token: string) => void;
+}
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+function Login({ onLogin }: Props) {
+  const [userName, setUserName] = useState('admin');
+  const [password, setPassword] = useState('admin');
+  const [errorLogin, setErrorLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // Handle form submission here
-    console.log(`Username: ${userName}, Password: ${password}`);
+    setIsLoading(true);
+
+    const { data, error } = await postLogin({ userName, password });
+
+    setErrorLogin(error);
+    setIsLoading(false);
+
+    if (data?.token) {
+      onLogin(data.token);
+    }
   }
 
   return (
@@ -51,11 +67,18 @@ function Login() {
         </div>
         <button
           type="submit"
-          className="inline-flex justify-center rounded-lg text-sm font-semibold py-2.5 px-4 bg-slate-900 text-white hover:bg-slate-700 w-full"
+          className="inline-flex justify-center mb-6 rounded-lg text-sm font-semibold py-2.5 px-4 bg-slate-900 text-white hover:bg-slate-700 w-full"
         >
           Sign in
         </button>
+        {errorLogin && (
+          <div className="px-6 py-4 bg-red-100 text-red-700">
+            <span className="font-bold">Error: </span> The provided credentials
+            don't exist
+          </div>
+        )}
       </form>
+      {isLoading && <Spinner loadingMessage="Logging in" show={true} />}
     </main>
   );
 }
