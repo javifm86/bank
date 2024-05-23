@@ -4,6 +4,10 @@ const server = jsonServer.create();
 const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
 
+server.use(function (req, res, next) {
+  setTimeout(next, 400);
+});
+
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
