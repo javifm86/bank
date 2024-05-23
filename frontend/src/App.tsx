@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Login from './components/Login/Login';
+import ClientArea from './components/ClientArea/ClientArea';
 
 function App() {
   const [userToken, setUserToken] = useState<string | null>(null);
@@ -8,13 +9,7 @@ function App() {
     setUserToken(token);
   }
 
-  return userToken === null ? (
-    <Login onLogin={handleLogin} />
-  ) : (
-    <>
-      <span className="hello-world">Hello world</span>
-    </>
-  );
+  return userToken === null ? <Login onLogin={handleLogin} /> : <ClientArea />;
 }
 
 export default App;
