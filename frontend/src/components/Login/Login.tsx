@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import postLogin from '../../api/login';
 import Spinner from '../Spinner/Spinner';
+import Alert from '../Alert/Alert';
 
 interface Props {
   onLogin: (token: string) => void;
@@ -71,12 +72,7 @@ function Login({ onLogin }: Props) {
         >
           Sign in
         </button>
-        {errorLogin && (
-          <div className="px-6 py-4 bg-red-100 text-red-700">
-            <span className="font-bold">Error: </span> The provided credentials
-            don't exist
-          </div>
-        )}
+        {errorLogin && <Alert message="The provided credentials don't exist" />}
       </form>
       {isLoading && <Spinner loadingMessage="Logging in" show={true} />}
     </main>

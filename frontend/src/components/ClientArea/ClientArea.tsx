@@ -6,6 +6,7 @@ import {
   GetMovementsResponse,
 } from '../../api/movements';
 import Spinner from '../Spinner/Spinner';
+import Alert from '../Alert/Alert';
 
 function ClientArea() {
   const [movements, setMovements] = useState<GetMovementsResponse[]>([]);
@@ -94,12 +95,7 @@ function ClientArea() {
       </div>
       {movements !== null && <MovementsTable movements={movements} />}
       {isLoading && <Spinner loadingMessage="Loading" show={true} />}
-      {error && (
-        <div className="px-6 py-4 bg-red-100 text-red-700">
-          <span className="font-bold">Error: </span> User movements could not be
-          loaded
-        </div>
-      )}
+      {error && <Alert message="User movements could not be loaded" />}
     </main>
   );
 }
