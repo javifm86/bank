@@ -1,1 +1,34 @@
-{}
+{
+  "movements": [
+    {
+      "date": "23.05.2023",
+      "type": "withdraw",
+      "amount": 500,
+      "balance": 5000
+    },
+    {
+      "date": "23.04.2023",
+      "type": "deposit",
+      "amount": 2000,
+      "balance": 5500
+    },
+    {
+      "date": "23.03.2023",
+      "type": "withdraw",
+      "amount": 500,
+      "balance": 3500
+    },
+    {
+      "date": "23.02.2023",
+      "type": "withdraw",
+      "amount": 1000,
+      "balance": 4000
+    },
+    {
+      "date": "23.01.2023",
+      "type": "deposit",
+      "amount": 5000,
+      "balance": 5000
+    }
+  ]
+}
