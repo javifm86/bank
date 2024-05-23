@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import './App.css';
 import Spinner from './components/Spinner/Spinner';
+import Login from './components/Login/Login';
 
 function App() {
   const [showSpinner, setShowSpinner] = useState(true);
@@ -16,11 +16,13 @@ function App() {
     };
   }, []);
 
-  return (
-    <main className="bg-green-600">
+  return !isLoggedIn ? (
+    <Login />
+  ) : (
+    <>
       <span className="hello-world">Hello world</span>
       <Spinner loadingMessage="Loading..." show={showSpinner} />
-    </main>
+    </>
   );
 }
 
