@@ -1,0 +1,13 @@
+{
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "options": { "singleQuote": true }
+    },
+    {
+      "files": ["*.json", "*.scss"],
+      "options": { "singleQuote": false }
+    }
+  ],
+  "printWidth": 80
+}
