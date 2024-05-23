@@ -12,10 +12,7 @@ server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
 server.post('/login', function (req, res, next) {
-  req.method = 'GET';
-  req.query = req.body;
-
-  const { userName, password } = req.query;
+  const { userName, password } = req.body;
 
   if (userName === 'admin' && password === 'admin') {
     res.status(200).send({
@@ -24,6 +21,18 @@ server.post('/login', function (req, res, next) {
   } else {
     res.status(401).send({});
   }
+});
+
+server.post('/movements', function (req, res, next) {
+  console.log(req.body);
+  req.body = {
+    amount: req.body.params.amount,
+    type: req.body.params.type,
+    date: '23.12.2023',
+    balance: 10000,
+    id: new Date().getTime(),
+  };
+  next();
 });
 
 server.use(router);
