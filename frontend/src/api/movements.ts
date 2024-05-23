@@ -11,6 +11,12 @@ interface GetMovementsResponse {
   balance: number;
 }
 
+interface PostDepositParams {
+  user: string;
+  amount: number;
+  type: 'withdraw' | 'deposit';
+}
+
 async function getMovements(params: GetMovementsParams) {
   try {
     const { data } = await http.get<GetMovementsResponse[]>('/movements', {
@@ -28,5 +34,20 @@ async function getMovements(params: GetMovementsParams) {
   }
 }
 
-export default getMovements;
+async function postMovements(params: PostDepositParams) {
+  try {
+    await http.post<GetMovementsResponse[]>('/movements', {
+      params,
+    });
+    return {
+      error: false,
+    };
+  } catch (error) {
+    return {
+      error: true,
+    };
+  }
+}
+
+export { getMovements, postMovements };
 export type { GetMovementsResponse };
