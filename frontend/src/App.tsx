@@ -1,27 +1,18 @@
 import { useEffect, useState } from 'react';
-import Spinner from './components/Spinner/Spinner';
 import Login from './components/Login/Login';
 
 function App() {
-  const [showSpinner, setShowSpinner] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userToken, setUserToken] = useState<string | null>(null);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setShowSpinner(false);
-    }, 4000);
+  function handleLogin(token: string) {
+    setUserToken(token);
+  }
 
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
-
-  return !isLoggedIn ? (
-    <Login />
+  return userToken === null ? (
+    <Login onLogin={handleLogin} />
   ) : (
     <>
       <span className="hello-world">Hello world</span>
-      <Spinner loadingMessage="Loading..." show={showSpinner} />
     </>
   );
 }
