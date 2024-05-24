@@ -13,6 +13,8 @@ services:
     environment:
     #user postgres
       POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
 
   pgadmin:
     image: dpage/pgadmin4
