@@ -6,6 +6,10 @@ const http = axios.create({
   baseURL: 'http://localhost:3001',
 });
 
+const setSessionToken = (newToken: string) => {
+  token = newToken;
+};
+
 http.interceptors.request.use(
   (config) => {
     if (token) {
@@ -19,3 +23,4 @@ http.interceptors.request.use(
 );
 
 export default http;
+export { setSessionToken };
