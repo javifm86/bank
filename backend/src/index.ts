@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import db from './database/connect';
 
@@ -14,18 +14,31 @@ interface User {
   password_hash: string;
 }
 
-app.post('/login', async (req, res) => {
-  const { userName, password } = req.body;
+interface LoginPostRequest extends Request {
+  body: {
+    username: string;
+    password: string;
+  };
+}
 
-  db.any<User>('SELECT * FROM users WHERE username = $1', [userName])
+app.post('/login', async (req: LoginPostRequest, res) => {
+  const { username, password } = req.body;
+
+  db.any<User>('SELECT * FROM users WHERE username = $1', [username])
     .then((results) => {
       if (results.length) {
-        const { password_hash, username } = results[0];
+        const { password_hash, username: usernameDb } = results[0];
         console.log('password_hash:', password_hash);
         console.log('password:', password);
         bcrypt.compare(password, password_hash, function (err, result) {
           if (result === true) {
-            const token = jwt.sign(username, SECRET_KEY);
+            const payload = {
+              username: usernameDb,
+            };
+
+            const token = jwt.sign(payload, SECRET_KEY, {
+              expiresIn: '30m',
+            });
             res.json({ token });
           } else {
             res.status(400).json({
@@ -47,59 +60,53 @@ app.post('/login', async (req, res) => {
     });
 });
 
-app.get('/:password', (req, res) => {
-  const plainPassword = req.params.password;
-  console.log(plainPassword);
-
-  const saltRounds = 10;
-
-  bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(`hashedPassword:--${hashedPassword}--`);
-
-    bcrypt.compare(plainPassword, hashedPassword, function (err, result) {
-      if (result === true) {
-        console.log('Password matches');
-      } else {
-        console.log('Password does not match');
-      }
-
-      db.any('SELECT * FROM users')
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  });
-  res.json({ message: 'Hello world' });
+app.get('/protected', verifyToken, (req: RequestWithUser, res) => {
+  console.log('user in /protected:', req.user);
+  res.json({ message: 'Protected content' });
 });
 
-// app.get('/protected', verifyToken, (req, res) => {
-//   res.json({ message: 'Protected content' });
-// });
+app.use(verifyToken);
 
-// function verifyToken(req: Request, res: Response, next: NextFunction) {
-//   const bearerHeader = req.headers['authorization'];
+interface CustomJwtPayload extends JwtPayload {
+  username: string;
+}
 
-//   if (bearerHeader) {
-//     const bearer = bearerHeader.split(' ');
-//     const bearerToken = bearer[1];
-//     jwt.verify(bearerToken, SECRET_KEY, (err, data) => {
-//       if (err) {
-//         res.sendStatus(403);
-//       } else {
-//         req.user = data;
-//         next();
-//       }
-//     });
-//   } else {
-//     res.sendStatus(403);
-//   }
-// }
+interface RequestWithUser extends Request {
+  user?: string | JwtPayload | undefined;
+}
+
+function verifyToken(req: RequestWithUser, res: Response, next: NextFunction) {
+  // Exclude /login route from JWT validation
+  if (req.path === '/login') {
+    next();
+    return;
+  }
+
+  const bearerHeader = req.headers['authorization'];
+
+  if (bearerHeader) {
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+    jwt.verify(
+      bearerToken,
+      SECRET_KEY,
+      (
+        err: VerifyErrors | null,
+        data: string | JwtPayload | undefined
+      ): void => {
+        if (err) {
+          res.sendStatus(401);
+        } else {
+          const { username } = data as CustomJwtPayload;
+          req.user = username;
+          next();
+        }
+      }
+    );
+  } else {
+    console.log('no hay token');
+    res.sendStatus(401);
+  }
+}
 
 app.listen(3000, () => console.log('Server started on port 3000'));
