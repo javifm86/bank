@@ -27,10 +27,11 @@ async function getMovements() {
   }
 }
 
-async function postMovements(params: PostDepositParams) {
+async function postMovements({ amount, type }: PostDepositParams) {
   try {
     await http.post<GetMovementsResponse[]>('/movements', {
-      params,
+      amount,
+      type,
     });
     return {
       error: false,

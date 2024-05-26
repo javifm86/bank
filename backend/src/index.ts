@@ -92,7 +92,7 @@ app.use(verifyToken);
 
 app.get('/movements', (req: RequestWithUser, res) => {
   db.any<Movement>(
-    "SELECT TO_CHAR(date, 'YYYY-MM-DD') as date, type, amount, balance FROM movements WHERE username = $1",
+    'SELECT date, type, amount, balance FROM movements WHERE username = $1 ORDER BY date DESC',
     [req.user]
   )
     .then((results) => {
