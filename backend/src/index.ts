@@ -14,6 +14,14 @@ interface User {
   password_hash: string;
 }
 
+interface Movement {
+  username: string;
+  date: string;
+  type: string;
+  amount: number;
+  balance: number;
+}
+
 interface LoginPostRequest extends Request {
   body: {
     username: string;
@@ -60,12 +68,35 @@ app.post('/login', async (req: LoginPostRequest, res) => {
     });
 });
 
-app.get('/protected', verifyToken, (req: RequestWithUser, res) => {
+app.use(verifyToken);
+
+app.get('/protected', (req: RequestWithUser, res) => {
   console.log('user in /protected:', req.user);
   res.json({ message: 'Protected content' });
 });
 
-app.use(verifyToken);
+app.get('/movements', (req: RequestWithUser, res) => {
+  db.any<Movement>(
+    "SELECT TO_CHAR(date, 'YYYY-MM-DD') as date, type, amount, balance FROM movements WHERE username = $1",
+    [req.user]
+  )
+    .then((results) => {
+      if (results.length) {
+        console.log('results:', results);
+        console.log(results[0].date);
+        console.log(typeof results[0].date);
+        res.json({ data: results });
+      } else {
+        res.status(400).json({
+          error: 'Movements not found',
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: 'Generic error in movements' });
+    });
+});
 
 interface CustomJwtPayload extends JwtPayload {
   username: string;
