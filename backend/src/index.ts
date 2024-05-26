@@ -2,12 +2,15 @@ import express, { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import db from './database/connect';
+import cors from 'cors';
 
 // Replace with your own secret key
 const SECRET_KEY = 'your-secret-key';
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({ origin: 'http://localhost:5173' }));
 
 interface User {
   username: string;
@@ -36,8 +39,6 @@ app.post('/login', async (req: LoginPostRequest, res) => {
     .then((results) => {
       if (results.length) {
         const { password_hash, username: usernameDb } = results[0];
-        console.log('password_hash:', password_hash);
-        console.log('password:', password);
         bcrypt.compare(password, password_hash, function (err, result) {
           if (result === true) {
             const payload = {
@@ -61,7 +62,6 @@ app.post('/login', async (req: LoginPostRequest, res) => {
       }
     })
     .catch((error) => {
-      console.log(error);
       res
         .status(400)
         .json({ error: 'Generic error. Invalid username or password' });
@@ -70,11 +70,6 @@ app.post('/login', async (req: LoginPostRequest, res) => {
 
 app.use(verifyToken);
 
-app.get('/protected', (req: RequestWithUser, res) => {
-  console.log('user in /protected:', req.user);
-  res.json({ message: 'Protected content' });
-});
-
 app.get('/movements', (req: RequestWithUser, res) => {
   db.any<Movement>(
     "SELECT TO_CHAR(date, 'YYYY-MM-DD') as date, type, amount, balance FROM movements WHERE username = $1",
@@ -82,10 +77,7 @@ app.get('/movements', (req: RequestWithUser, res) => {
   )
     .then((results) => {
       if (results.length) {
-        console.log('results:', results);
-        console.log(results[0].date);
-        console.log(typeof results[0].date);
-        res.json({ data: results });
+        res.json(results);
       } else {
         res.status(400).json({
           error: 'Movements not found',
@@ -93,7 +85,6 @@ app.get('/movements', (req: RequestWithUser, res) => {
       }
     })
     .catch((error) => {
-      console.log(error);
       res.status(400).json({ error: 'Generic error in movements' });
     });
 });
@@ -135,7 +126,6 @@ function verifyToken(req: RequestWithUser, res: Response, next: NextFunction) {
       }
     );
   } else {
-    console.log('no hay token');
     res.sendStatus(401);
   }
 }
