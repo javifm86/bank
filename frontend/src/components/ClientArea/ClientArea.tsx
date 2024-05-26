@@ -29,7 +29,6 @@ function ClientArea() {
 
     setIsLoading(true);
     const { error } = await postMovements({
-      user: 'admin',
       amount: Number(amount),
       type,
     });
@@ -43,8 +42,7 @@ function ClientArea() {
 
   async function fetchMovements() {
     setIsLoading(true);
-    const { data, error } = await getMovements({ user: 'admin' });
-
+    const { data, error } = await getMovements();
     setError(error);
 
     if (data) {

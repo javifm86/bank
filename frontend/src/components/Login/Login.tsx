@@ -7,7 +7,7 @@ interface Props {
 }
 
 function Login({ onLogin }: Props) {
-  const [userName, setUserName] = useState('admin');
+  const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('admin');
   const [errorLogin, setErrorLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,7 @@ function Login({ onLogin }: Props) {
     event.preventDefault();
     setIsLoading(true);
 
-    const { data, error } = await postLogin({ userName, password });
+    const { data, error } = await postLogin({ username, password });
 
     setErrorLogin(error);
     setIsLoading(false);
@@ -41,9 +41,9 @@ function Login({ onLogin }: Props) {
             id="user"
             className="mt-2 appearance-none text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200"
             required
-            value={userName}
+            value={username}
             onChange={(event) => {
-              setUserName(event.target.value);
+              setUsername(event.target.value);
             }}
           />
         </div>

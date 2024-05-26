@@ -1,7 +1,7 @@
 import http from '../utils/http';
 
 interface PostLoginParams {
-  userName: string;
+  username: string;
   password: string;
 }
 
