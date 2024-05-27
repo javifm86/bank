@@ -1,9 +1,9 @@
 import express, { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 import db from './database/connect';
 import cors from 'cors';
 import login from './controllers/login';
+import { getMovements } from './controllers/movements';
 
 const SECRET_KEY = 'your-secret-key';
 
@@ -18,14 +18,6 @@ interface CustomJwtPayload extends JwtPayload {
 
 interface RequestWithUser extends Request {
   user?: string | JwtPayload | undefined;
-}
-
-interface Movement {
-  username: string;
-  date: string;
-  type: string;
-  amount: number;
-  balance: number;
 }
 
 interface Account {
@@ -44,24 +36,7 @@ app.post('/login', login);
 
 app.use(verifyToken);
 
-app.get('/movements', (req: RequestWithUser, res) => {
-  db.any<Movement>(
-    'SELECT date, type, amount, balance FROM movements WHERE username = $1 ORDER BY date DESC',
-    [req.user]
-  )
-    .then((results) => {
-      if (results.length) {
-        res.json(results);
-      } else {
-        res.status(400).json({
-          error: 'Movements not found',
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(400).json({ error: 'Generic error in movements' });
-    });
-});
+app.get('/movements', getMovements);
 
 app.post('/movements', (req: PostMovementRequest, res) => {
   const { amount, type } = req.body;
