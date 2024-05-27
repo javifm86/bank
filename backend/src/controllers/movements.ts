@@ -13,13 +13,7 @@ interface PostMovementRequest extends RequestWithUser {
 
 async function getMovements(req: RequestWithUser, res: Response) {
   const user = req.user;
-
-  if (!user) {
-    returnError(res, 'User not found');
-    return;
-  }
-
-  const { movements, error } = await getMovementsDb(user);
+  const { movements, error } = await getMovementsDb(user as string);
 
   if (error) {
     returnError(res, 'An error ocurred retrieving movements', 500);
@@ -30,14 +24,8 @@ async function getMovements(req: RequestWithUser, res: Response) {
 }
 
 function validatePostMovementsParams(req: PostMovementRequest, res: Response) {
-  const user = req.user;
   let hasError = false;
   const { amount, type } = req.body;
-
-  if (!user) {
-    hasError = true;
-    returnError(res, 'User not found');
-  }
 
   const isAmountValid = typeof amount === 'number' && Number.isInteger(amount);
   const isTypeValid = type === 'withdraw' || type === 'deposit';
