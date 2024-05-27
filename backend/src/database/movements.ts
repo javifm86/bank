@@ -1,4 +1,5 @@
 import db from '../database/connect';
+import { updateBalance } from './account';
 
 interface Movement {
   username: string;
@@ -24,4 +25,28 @@ async function getMovementsDb(user: string) {
   }
 }
 
-export { getMovementsDb };
+async function transactionMovement(
+  user: string,
+  type: string,
+  amount: number,
+  newBalance: number
+) {
+  try {
+    await db.tx(async (t) => {
+      const queryMovement = t.none(
+        'INSERT INTO movements (username, date, type, amount, balance) VALUES ($1, NOW(), $2, $3, $4)',
+        [user, type, amount, newBalance]
+      );
+
+      const queryBalance = updateBalance(t, user, newBalance);
+
+      await t.batch([queryMovement, queryBalance]);
+    });
+
+    return { error: false };
+  } catch (error) {
+    return { error: true };
+  }
+}
+
+export { getMovementsDb, transactionMovement };
