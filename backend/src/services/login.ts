@@ -1,5 +1,16 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
+
+const SECRET_KEY = 'your-secret-key';
+
+interface CustomJwtPayload extends JwtPayload {
+  username: string;
+}
+
+interface VerifyJWTResponse {
+  error: boolean;
+  username: string | null;
+}
 
 function comparePassword(
   password: string,
@@ -15,14 +26,38 @@ function comparePassword(
   });
 }
 
-function getJWT(username: string, secretKey: string) {
+function getJWT(username: string) {
   const payload = { username };
 
-  const token = jwt.sign(payload, secretKey, {
+  const token = jwt.sign(payload, SECRET_KEY, {
     expiresIn: '30m',
   });
 
   return token;
 }
 
-export { comparePassword, getJWT };
+function verifyJWT(bearerToken: string): Promise<VerifyJWTResponse> {
+  return new Promise((resolve) => {
+    jwt.verify(bearerToken, SECRET_KEY, callbackVerify);
+
+    function callbackVerify(
+      err: VerifyErrors | null,
+      data: string | JwtPayload | undefined
+    ): void {
+      if (err) {
+        resolve({
+          error: true,
+          username: null,
+        });
+        return;
+      }
+      const { username } = data as CustomJwtPayload;
+      resolve({
+        error: false,
+        username,
+      });
+    }
+  });
+}
+
+export { comparePassword, getJWT, verifyJWT };

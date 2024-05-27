@@ -3,8 +3,6 @@ import { Request, Response } from 'express';
 import { getUser } from '../database/user';
 import { comparePassword, getJWT } from '../services/login';
 
-const SECRET_KEY = 'your-secret-key';
-
 interface LoginPostRequest extends Request {
   body: {
     username: string;
@@ -39,7 +37,7 @@ async function login(req: LoginPostRequest, res: Response) {
     return;
   }
 
-  const token = getJWT(username, SECRET_KEY);
+  const token = getJWT(username);
   res.json({ token });
 }
 
