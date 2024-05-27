@@ -3,8 +3,8 @@ import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import db from './database/connect';
 import cors from 'cors';
+import login from './controllers/login';
 
-// Replace with your own secret key
 const SECRET_KEY = 'your-secret-key';
 
 const app = express();
@@ -20,11 +20,6 @@ interface RequestWithUser extends Request {
   user?: string | JwtPayload | undefined;
 }
 
-interface User {
-  username: string;
-  password_hash: string;
-}
-
 interface Movement {
   username: string;
   date: string;
@@ -38,13 +33,6 @@ interface Account {
   balance: number;
 }
 
-interface LoginPostRequest extends Request {
-  body: {
-    username: string;
-    password: string;
-  };
-}
-
 interface PostMovementRequest extends RequestWithUser {
   body: {
     amount?: number;
@@ -52,41 +40,7 @@ interface PostMovementRequest extends RequestWithUser {
   };
 }
 
-app.post('/login', async (req: LoginPostRequest, res) => {
-  const { username, password } = req.body;
-
-  db.any<User>('SELECT * FROM users WHERE username = $1', [username])
-    .then((results) => {
-      if (results.length) {
-        const { password_hash, username: usernameDb } = results[0];
-        bcrypt.compare(password, password_hash, function (err, result) {
-          if (result === true) {
-            const payload = {
-              username: usernameDb,
-            };
-
-            const token = jwt.sign(payload, SECRET_KEY, {
-              expiresIn: '30m',
-            });
-            res.json({ token });
-          } else {
-            res.status(400).json({
-              error: 'Passwords not match. Invalid username or password',
-            });
-          }
-        });
-      } else {
-        res.status(400).json({
-          error: 'No results obtained from db. Invalid username or password',
-        });
-      }
-    })
-    .catch((error) => {
-      res
-        .status(400)
-        .json({ error: 'Generic error. Invalid username or password' });
-    });
-});
+app.post('/login', login);
 
 app.use(verifyToken);
 
