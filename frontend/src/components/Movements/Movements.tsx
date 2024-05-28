@@ -37,10 +37,17 @@ function Movements({ movements }: Props) {
               const isDeposit = type === 'deposit';
               const sign = isDeposit ? '+' : '-';
               const cssAmount = isDeposit ? 'text-green-500' : 'text-red-500';
+              const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              });
 
               return (
                 <tr key={index}>
-                  <td className="px-5 py-5 text-sm text-center">{date}</td>
+                  <td className="px-5 py-5 text-sm text-center">
+                    {formattedDate}
+                  </td>
                   <td className={`px-5 py-5 text-sm text-right ${cssAmount}`}>
                     {sign}
                     {currencyFormatter.format(amount)}
