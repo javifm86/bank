@@ -89,8 +89,8 @@ function ClientArea() {
           Withdraw
         </Button>
         {errorMovement && (
-          <div className="text-red-600" data-testid="errorUpdating">
-            Error performing the movement
+          <div className="flex items-center h-10 text-red-600" data-testid="errorUpdating">
+            <span>Error performing the movement</span>
           </div>
         )}
       </div>
