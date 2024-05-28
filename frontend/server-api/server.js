@@ -12,9 +12,9 @@ server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
 server.post('/login', function (req, res, next) {
-  const { userName, password } = req.body;
+  const { username, password } = req.body;
 
-  if (userName === 'admin' && password === 'admin') {
+  if (username === 'admin' && password === 'admin') {
     res.status(200).send({
       token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
     });
@@ -24,11 +24,10 @@ server.post('/login', function (req, res, next) {
 });
 
 server.post('/movements', function (req, res, next) {
-  console.log(req.body);
   req.body = {
-    amount: req.body.params.amount,
-    type: req.body.params.type,
-    date: '23.12.2023',
+    amount: req.body.amount,
+    type: req.body.type,
+    date: new Date().toISOString(),
     balance: 10000,
     id: new Date().getTime(),
   };
@@ -36,6 +35,6 @@ server.post('/movements', function (req, res, next) {
 });
 
 server.use(router);
-server.listen(3001, function () {
+server.listen(3000, function () {
   console.log('JSON Server is running');
 });

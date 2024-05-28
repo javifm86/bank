@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test:watch": "jest --watchAll --config=jest.config.ts",
     "test": "jest --bail --coverage --config=jest.config.ts --passWithNoTests",
-    "mock-api": "json-server --watch ./server-api/db.json --port 3001 --delay 400"
+    "mock-api": "cd server-api && node server.js"
   },
   "dependencies": {
     "@react-aria/focus": "^3.12.0",

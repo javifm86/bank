@@ -2,35 +2,35 @@
   "movements": [
     {
       "id": "4",
-      "date": "23.05.2023",
+      "date": "2024-05-27T15:15:57.584Z",
       "type": "withdraw",
       "amount": 500,
       "balance": 5000
     },
     {
       "id": "3",
-      "date": "23.04.2023",
+      "date": "2024-05-26T15:15:57.584Z",
       "type": "deposit",
       "amount": 2000,
       "balance": 5500
     },
     {
       "id": "2",
-      "date": "23.03.2023",
+      "date": "2024-05-25T15:15:57.584Z",
       "type": "withdraw",
       "amount": 500,
       "balance": 3500
     },
     {
       "id": "1",
-      "date": "23.02.2023",
+      "date": "2024-05-24T15:15:57.584Z",
       "type": "withdraw",
       "amount": 1000,
       "balance": 4000
     },
     {
       "id": "0",
-      "date": "23.01.2023",
+      "date": "2024-05-23T15:15:57.584Z",
       "type": "deposit",
       "amount": 5000,
       "balance": 5000
@@ -38,16 +38,30 @@
     {
       "amount": 30,
       "type": "withdraw",
-      "date": "23.12.2023",
+      "date": "2024-05-22T15:15:57.584Z",
       "balance": 10000,
       "id": 1716475311612
     },
     {
       "amount": 50,
       "type": "deposit",
-      "date": "23.12.2023",
+      "date": "2024-05-21T15:15:57.584Z",
       "balance": 10000,
       "id": 1716475354824
+    },
+    {
+      "amount": 6000,
+      "type": "deposit",
+      "date": "2024-05-28T21:50:24.250Z",
+      "balance": 10000,
+      "id": 1716933024250
+    },
+    {
+      "amount": 111111,
+      "type": "deposit",
+      "date": "2024-05-28T21:50:43.103Z",
+      "balance": 10000,
+      "id": 1716933043103
     }
   ]
 }
