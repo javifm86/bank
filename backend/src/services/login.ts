@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 
-const SECRET_KEY = 'your-secret-key';
+const SECRET_KEY = process.env.BACKEND_SECRET_KEY ?? 'your-secret-key';
 
 interface CustomJwtPayload extends JwtPayload {
   username: string;
