@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import postLogin from '../../api/login';
 import Spinner from '../Spinner/Spinner';
 import Alert from '../Alert/Alert';
+import Button from '../Button/Button';
 
 interface Props {
   onLogin: (token: string) => void;
@@ -66,12 +67,9 @@ function Login({ onLogin }: Props) {
             }}
           />
         </div>
-        <button
-          type="submit"
-          className="inline-flex justify-center mb-6 rounded-lg text-sm font-semibold py-2.5 px-4 bg-slate-900 text-white hover:bg-slate-700 w-full"
-        >
+        <Button buttonType="primary" type="submit" className="w-full mb-6">
           Sign in
-        </button>
+        </Button>
         {errorLogin && <Alert message="The provided credentials don't exist" />}
       </form>
       {isLoading && <Spinner loadingMessage="Logging in" show={true} />}

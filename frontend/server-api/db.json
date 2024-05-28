@@ -34,6 +34,20 @@
       "type": "deposit",
       "amount": 5000,
       "balance": 5000
+    },
+    {
+      "amount": 30,
+      "type": "withdraw",
+      "date": "23.12.2023",
+      "balance": 10000,
+      "id": 1716475311612
+    },
+    {
+      "amount": 50,
+      "type": "deposit",
+      "date": "23.12.2023",
+      "balance": 10000,
+      "id": 1716475354824
     }
   ]
 }

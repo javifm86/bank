@@ -7,6 +7,7 @@ import {
 } from '../../api/movements';
 import Spinner from '../Spinner/Spinner';
 import Alert from '../Alert/Alert';
+import Button from '../Button/Button';
 
 function ClientArea() {
   const [movements, setMovements] = useState<GetMovementsResponse[]>([]);
@@ -75,20 +76,12 @@ function ClientArea() {
             setAmount(String(integerAmount));
           }}
         />
-        <button
-          type="button"
-          className="inline-flex justify-center rounded-lg text-sm font-semibold py-2.5 px-4 bg-slate-900 text-white hover:bg-slate-700"
-          onClick={handleDeposit}
-        >
+        <Button buttonType="primary" type="button" onClick={handleDeposit}>
           Deposit
-        </button>
-        <button
-          type="button"
-          className="inline-flex justify-center rounded-lg text-sm font-semibold py-2.5 px-4 bg-white text-slate-900 hover:bg-slate-50 border border-slate-900"
-          onClick={handleWithdraw}
-        >
+        </Button>
+        <Button buttonType="secondary" type="button" onClick={handleWithdraw}>
           Withdraw
-        </button>
+        </Button>
         {errorMovement && (
           <div className="text-red-600">Error actualizando movimiento</div>
         )}
