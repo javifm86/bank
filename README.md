@@ -80,6 +80,7 @@ App should be accessible on port 3000, as defined in [.env](./backend/.env) file
   - user: admin
   - password: admin
 - There is not an endpoint to Sign up and creating new users, I think that it would be out of the scope of the exercise.
+- Set up the application and running has been tested following the instructions included in this README in Ubuntu and Windows 10.
 
 ## Screenshots
 
