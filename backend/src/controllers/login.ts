@@ -12,8 +12,10 @@ interface LoginPostRequest extends Request {
 
 async function login(req: LoginPostRequest, res: Response) {
   const { username: usernameParam, password: passwordParam } = req.body;
+  console.log('login request received', { usernameParam, passwordParam });
 
   if (!usernameParam || !passwordParam) {
+    console.log('username and password are required. returning error 400.');
     returnError(res, 'username and password are required');
     return;
   }
@@ -21,23 +23,29 @@ async function login(req: LoginPostRequest, res: Response) {
   const { error, passwordHash, username } = await getUser(usernameParam);
 
   if (error) {
+    console.log(
+      'an error ocurred retrieving username information. returning error 500.'
+    );
     returnError(res, 'an error ocurred retrieving username information', 500);
     return;
   }
 
   if (!username || !passwordHash) {
-    returnError(res, 'invalid username or password');
+    console.log('invalid username or password. returning error 401.', 401);
+    returnError(res, 'invalid username or password', 401);
     return;
   }
 
   const isPasswordCorrect = await comparePassword(passwordParam, passwordHash);
 
   if (!isPasswordCorrect) {
-    returnError(res, 'invalid username or password');
+    console.log('password is not correct. returning error 401.');
+    returnError(res, 'invalid username or password', 401);
     return;
   }
 
   const token = getJWT(username);
+  console.log('login successful. returning token.');
   res.json({ token });
 }
 

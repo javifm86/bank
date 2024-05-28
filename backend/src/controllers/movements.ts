@@ -13,13 +13,18 @@ interface PostMovementRequest extends RequestWithUser {
 
 async function getMovements(req: RequestWithUser, res: Response) {
   const user = req.user;
+
+  console.log('getMovements request received', { user });
+
   const { movements, error } = await getMovementsDb(user as string);
 
   if (error) {
+    console.log('An error ocurred retrieving movements. returning error 500.');
     returnError(res, 'An error ocurred retrieving movements', 500);
     return;
   }
 
+  console.log('Movements retrieved. returning them.', movements);
   res.json(movements);
 }
 
@@ -32,6 +37,9 @@ function validatePostMovementsParams(req: PostMovementRequest, res: Response) {
 
   if (!amount || !type || !isAmountValid || !isTypeValid) {
     hasError = true;
+    console.log(
+      'Error validating params: amount must be an integer number and type must be "withdraw" or "deposit"'
+    );
     returnError(
       res,
       'Error validating params: amount must be an integer number and type must be "withdraw" or "deposit"'
@@ -46,6 +54,8 @@ async function postMovements(req: PostMovementRequest, res: Response) {
   const { amount, type } = req.body;
   const hasErrorInParams = validatePostMovementsParams(req, res);
 
+  console.log('postMovements request received', { user, amount, type });
+
   // Add user type and amount check to avoid Typescript complaining below about values possibly undefined
   if (hasErrorInParams || !user || !type || !amount) {
     return;
@@ -54,6 +64,7 @@ async function postMovements(req: PostMovementRequest, res: Response) {
   const { balance, error: errorBalance } = await getBalance(user);
 
   if (errorBalance || balance === null) {
+    console.log('An error ocurred retrieving balance. returning error 500.');
     returnError(res, 'An error ocurred creating movement', 500);
     return;
   }
@@ -61,6 +72,9 @@ async function postMovements(req: PostMovementRequest, res: Response) {
   const newBalance = type === 'deposit' ? balance + amount : balance - amount;
 
   if (newBalance < 0) {
+    console.log(
+      'Balance is not enough to withdraw that money. returning error 400.'
+    );
     returnError(res, 'Balance is not enough to withdraw that money');
     return;
   }
@@ -68,10 +82,12 @@ async function postMovements(req: PostMovementRequest, res: Response) {
   const { error } = await transactionMovement(user, type, amount, newBalance);
 
   if (error) {
+    console.log('An error ocurred creating movement. returning error 500.');
     returnError(res, 'An error ocurred creating movement', 500);
     return;
   }
 
+  console.log('Movement created');
   res.json({ message: 'Movement created' });
 }
 

@@ -55,7 +55,7 @@ describe('Login', () => {
       .post('/login')
       .send({ username: 'test', password: 'test' });
 
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(401);
     expect(response.body).toEqual({
       error: 'invalid username or password',
     });
@@ -73,7 +73,7 @@ describe('Login', () => {
       .post('/login')
       .send({ username: 'test', password: 'test' });
 
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(401);
     expect(response.body).toEqual({
       error: 'invalid username or password',
     });

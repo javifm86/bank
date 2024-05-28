@@ -21,6 +21,7 @@ async function getMovementsDb(user: string) {
       error: false,
     };
   } catch (error) {
+    console.error('An error ocurred retrieving movements', error);
     return { movements: [], error: true };
   }
 }
@@ -45,6 +46,7 @@ async function transactionMovement(
 
     return { error: false };
   } catch (error) {
+    console.error('An error ocurred updating balance', error);
     return { error: true };
   }
 }

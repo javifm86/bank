@@ -26,6 +26,7 @@ async function getUser(username: string) {
       error: false,
     };
   } catch (error) {
+    console.error('An error ocurred retrieving user', error);
     return { passwordHash, username: user, error: true };
   }
 }

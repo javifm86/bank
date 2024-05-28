@@ -24,6 +24,7 @@ async function getBalance(username: string) {
       error: false,
     };
   } catch (error) {
+    console.error('An error ocurred retrieving balance', error);
     return {
       balance,
       error: true,
