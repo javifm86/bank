@@ -66,7 +66,7 @@ function ClientArea() {
       <div className="flex items-end gap-2 mb-12">
         <div>
           <label
-            htmlFor="password"
+            htmlFor="amount"
             className="block text-sm font-semibold leading-6 text-gray-900"
           >
             Money
@@ -89,7 +89,9 @@ function ClientArea() {
           Withdraw
         </Button>
         {errorMovement && (
-          <div className="text-red-600">Error actualizando movimiento</div>
+          <div className="text-red-600" data-testid="errorUpdating">
+            Error performing the movement
+          </div>
         )}
       </div>
       {movements !== null && <MovementsTable movements={movements} />}
