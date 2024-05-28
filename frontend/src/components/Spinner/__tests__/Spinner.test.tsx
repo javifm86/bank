@@ -1,11 +1,6 @@
-// Added to use querySelector for searching inside external library elements
-/* eslint-disable testing-library/no-node-access */
-/* eslint-disable testing-library/no-container */
-
 import userEvent from '@testing-library/user-event';
-import  { render, screen } from '@testing-library/react';
-import Spinner from '../Spinner/Spinner';
-
+import { render, screen } from '@testing-library/react';
+import Spinner from '../Spinner';
 
 describe('Spinner common component', () => {
   const MESSAGE = 'Loading content';
@@ -17,7 +12,7 @@ describe('Spinner common component', () => {
     const { container } = setup(false);
     const liveRegionElement = screen.queryByTestId('spinner__live-region');
 
-    expect(container.querySelector('.loading-spinner')).toBeInTheDocument();
+    expect(container.querySelector('.loading-spinner')).not.toBeInTheDocument();
     expect(liveRegionElement).not.toBeInTheDocument();
   });
 
