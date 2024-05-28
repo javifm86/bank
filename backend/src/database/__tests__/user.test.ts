@@ -4,6 +4,10 @@ import db from '../../database/connect';
 jest.mock('../../database/connect');
 
 describe('getUser', () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should return user data for a given username', async () => {
     (db.any as jest.Mock).mockResolvedValue([
       { username: 'testUser', password: 'passwordHash' },

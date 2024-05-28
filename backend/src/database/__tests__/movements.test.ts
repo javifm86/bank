@@ -6,6 +6,10 @@ jest.mock('../../database/connect');
 jest.mock('../account');
 
 describe('getMovementsDb', () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should return movements for a given username', async () => {
     const mockMovements = [
       { username: 'testUser', type: 'deposit', amount: 100, balance: 200 },
