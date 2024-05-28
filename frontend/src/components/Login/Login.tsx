@@ -3,6 +3,7 @@ import postLogin from '../../api/login';
 import Spinner from '../Spinner/Spinner';
 import Alert from '../Alert/Alert';
 import Button from '../Button/Button';
+import Input from '../Input/Input';
 
 interface Props {
   onLogin: (token: string) => void;
@@ -38,10 +39,9 @@ function Login({ onLogin }: Props) {
           >
             User
           </label>
-          <input
+          <Input
             type="text"
             id="user"
-            className="mt-2 appearance-none text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200"
             required
             value={username}
             onChange={(event) => {
@@ -56,10 +56,9 @@ function Login({ onLogin }: Props) {
           >
             Password
           </label>
-          <input
+          <Input
             type="password"
             id="password"
-            className="mt-2 appearance-none text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200"
             required
             value={password}
             onChange={(event) => {

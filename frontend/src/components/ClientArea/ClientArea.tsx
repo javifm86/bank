@@ -8,6 +8,7 @@ import {
 import Spinner from '../Spinner/Spinner';
 import Alert from '../Alert/Alert';
 import Button from '../Button/Button';
+import Input from '../Input/Input';
 
 function ClientArea() {
   const [movements, setMovements] = useState<GetMovementsResponse[]>([]);
@@ -62,18 +63,25 @@ function ClientArea() {
     <main className="max-w-5xl mx-auto overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
       <header className="text-4xl font-bold mb-12">Movements</header>
 
-      <div className="flex items-center gap-2 mb-6">
-        <input
-          type="number"
-          id="amount"
-          className="appearance-none text-slate-900 bg-white rounded-md block px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200"
-          required
-          value={amount}
-          onChange={(event) => {
-            const integerAmount = parseInt(event.target.value, 10);
-            setAmount(String(integerAmount));
-          }}
-        />
+      <div className="flex items-end gap-2 mb-12">
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-semibold leading-6 text-gray-900"
+          >
+            Money
+          </label>
+          <Input
+            type="number"
+            id="amount"
+            required
+            value={amount}
+            onChange={(event) => {
+              const integerAmount = parseInt(event.target.value, 10);
+              setAmount(String(integerAmount));
+            }}
+          />
+        </div>
         <Button buttonType="primary" type="button" onClick={handleDeposit}>
           Deposit
         </Button>
