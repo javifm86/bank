@@ -42,6 +42,9 @@ docker build -t my_postgres_with_data .
 
 # Execute container with database already created
 docker run --name name_you_want -e POSTGRES_PASSWORD=example -d -p 5432:5432 my_postgres_with_data
+
+# Check container is running
+docker ps
 ```
 
 This way, the database will be ready on the local port 5432. Credentiales, database name and related information can be found in [.env](./backend/.env) file.
