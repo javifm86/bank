@@ -3,7 +3,7 @@ import axios from 'axios';
 let token: string | null = null;
 
 const http = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_BACKEND_URL_BASE,
 });
 
 const setSessionToken = (newToken: string) => {
