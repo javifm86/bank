@@ -37,7 +37,7 @@ function Login({ onLogin }: Props) {
             htmlFor="user"
             className="block text-sm font-semibold leading-6 text-gray-900"
           >
-            User
+            User -------
           </label>
           <Input
             type="text"
